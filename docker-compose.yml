@@ -1,0 +1,27 @@
+version: '3'
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: springdb
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+  
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - rabbitmq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/springdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
